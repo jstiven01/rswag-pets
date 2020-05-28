@@ -3,7 +3,7 @@ class Api::V1::PetsController < ApplicationController
 
   # GET /api/v1/pets
   def index
-    @api_v1_pets = Api::V1::Pet.all
+    @api_v1_pets = Pet.all
 
     render json: @api_v1_pets
   end
@@ -15,10 +15,10 @@ class Api::V1::PetsController < ApplicationController
 
   # POST /api/v1/pets
   def create
-    @api_v1_pet = Api::V1::Pet.new(api_v1_pet_params)
+    @api_v1_pet = Pet.new(api_v1_pet_params)
 
     if @api_v1_pet.save
-      render json: @api_v1_pet, status: :created, location: @api_v1_pet
+      render json: @api_v1_pet, status: :created
     else
       render json: @api_v1_pet.errors, status: :unprocessable_entity
     end
@@ -41,11 +41,11 @@ class Api::V1::PetsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_api_v1_pet
-      @api_v1_pet = Api::V1::Pet.find(params[:id])
+      @api_v1_pet = Pet.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
     def api_v1_pet_params
-      params.fetch(:api_v1_pet, {})
+      params.permit(:name, :photo_url, :status)
     end
 end
